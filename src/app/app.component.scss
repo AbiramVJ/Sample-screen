@@ -1,0 +1,39 @@
+.price-label{
+  width: 75px;
+  color: green;
+  background-color: #c4f76d;
+  text-align: center;
+}
+.form-input{
+  height: 35px;
+  border: solid 1px gray;
+  width: 75px;
+  border-radius: 8px;
+}
+
+.product-main-img{
+  border-radius: 10px;
+  cursor: pointer;
+  object-fit: cover;
+}
+
+.add-to-cart-button {
+  background: linear-gradient(to right, #00c6ff, #0072ff);
+  color: white;
+  border: none;
+  padding: 9px 78px;
+  font-size: 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: inherit;
+}
+
+.add-to-cart-button:hover {
+  background: linear-gradient(to right, #0072ff, #00c6ff);
+}
+
