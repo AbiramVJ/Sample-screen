@@ -1,12 +1,12 @@
-<section>
-  <div class="row m-0">
+<!-- <section>
+  <div class="row m-0 d-none">
     <div class="col-10 mt-5 mx-auto">
       <div class="border rounded shadow-lg">
         <div class="row">
           <div class="col-10 mx-auto">
             <div class="row">
               <!-- MAIN IMAGE  -->
-              <div class="col-5">
+              <!-- <div class="col-5">
                 <div class="fs-6 fw-bold text-muted mt-2">Product details</div>
                 <div class="">
                   <img class="mt-2 product-main-img" src={{selectedImage}} alt="product-images" height="400px" width="318px">
@@ -16,9 +16,9 @@
                     <img class="product-main-img" src={{product.url}} alt={{product.id}} width="50px" height="75px" (click)="selectedImage = product.url;">
                   </div>
                 </div>
-              </div>
+              </div> -->
               <!-- PRICING AND DETAILS -->
-              <div class="col-7">
+              <!-- <div class="col-7">
                 <div class="fs-5 fw-bold mt-4 pt-2">Minimal Bar Stool</div>
                 <div class="d-flex">
                   <div class="me-1 text-muted" *ngFor="let startRating of startRating"><i class="fa fa-star" aria-hidden="true"></i></div>
@@ -36,9 +36,9 @@
                     <li>comfortable integrated layered chair seat chino design</li>
                     <li>fully assembled! No assembly require</li>
                   </ul>
-                </div>
+                </div> -->
                 <!-- FILTER OPTION -->
-                <div class="row">
+                <!-- <div class="row">
                   <div class="col-5">
                     <small class="fw-bold text-muted"> Frame material</small>
                     <ng-select [items]="materials" bindLabel="name" bindValue="id" [(ngModel)]="selectedMaterial"></ng-select>
@@ -62,5 +62,6 @@
       </div>
     </div>
   </div>
+</section> -->
 
-</section>
+<app-time-picker></app-time-picker>

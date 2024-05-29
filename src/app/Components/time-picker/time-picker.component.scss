@@ -1,0 +1,95 @@
+$app_color: #18bcbe;
+
+
+
+.custom-day {
+  text-align: center;
+  padding: 0.185rem 0.25rem;
+  display: inline-block;
+  height: 2.0rem;
+  width: 2.7rem;
+}
+
+.custom-day.focused {
+  background-color: #e6e6e6;
+  border-radius: 5px;
+}
+
+.custom-day.range,
+.custom-day:hover {
+  background-color: #16bfbf;
+  color: rgb(0, 0, 0);
+  border-radius: 5px;
+}
+
+.custom-day.faded {
+  background-color: #e5f8f8;
+  border-radius: 0;
+}
+
+.date-input{
+  border-right: 0 !important;
+}
+
+::ng-deep .ngb-dp-month:first-child .ngb-dp-week {
+  padding-left: .25rem;
+  border-bottom: 0;
+  border-radius: 0;
+  background-color: #ffffff!important;
+  margin-bottom: 8px;
+
+  .ngb-dp-weekday {
+    display: block;
+    visibility: hidden;
+  }
+
+  .ngb-dp-weekday:first-letter {
+    visibility: visible;
+    padding-left: 0.5rem !important;
+  }
+
+   .ngb-dp-day, .ngb-dp-week-number, .ngb-dp-weekday {
+    width: 2.7rem;
+    height: 2.0rem;
+    color: #000000 !important;
+    font-style: normal;
+
+  }
+  .small {
+    font-weight: 500;
+    font-size: 15px;
+  }
+}
+
+::ng-deep .ngb-dp-month-name {
+  font-size: larger;
+  height: 2rem;
+  line-height: 2rem;
+  text-align: center;
+  background-color: white !important;
+}
+::ng-deep .ngb-dp-month-name {
+  background-color: white;
+}
+
+::ng-deep .ngb-dp-arrow-btn {
+  color: $app_color;
+}
+
+
+::ng-deep .ngb-dp-header {
+  border-bottom: 0;
+  border-radius: .25rem .25rem 0 0;
+  padding-top: .25rem;
+  background: white !important;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+::ng-deep .ngb-datepicker.dropdown-menu {
+  padding: 0;
+  width: 20rem !important;
+}
+::ng-deep .dropdown-menu.show {
+  display: block !important;
+  width: 20rem !important;
+}
