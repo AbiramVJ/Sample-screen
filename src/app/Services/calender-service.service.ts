@@ -18,7 +18,7 @@ const I18N_VALUES:any = {
 
 @Injectable()
 export class I18n {
-	language = 'fr';
+	language = 'en-GB';
 }
 
 @Injectable()

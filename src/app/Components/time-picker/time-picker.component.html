@@ -4,14 +4,14 @@
   <div class="row">
     <div class="col-5 mx-auto">
       <div class="input-group mb-0">
-        <input type="text"  (click)="e.toggle()"  [navigation]="'arrows'" [displayMonths]="1" [firstDayOfWeek]="7" [dayTemplate]="t" outsideDays="hidden" class="form-control border-right-0 bg-white" [(ngModel)]="model" placeholder="Select End Date" ngbDatepicker #e="ngbDatepicker" readonly>
+        <input type="text" (click)="e.toggle()"  [navigation]="'arrows'" [displayMonths]="1" [firstDayOfWeek]="7" [dayTemplate]="t" outsideDays="hidden" class="form-control border-right-0 bg-white" [(ngModel)]="model" placeholder="Select End Date" ngbDatepicker #e="ngbDatepicker" readonly>
         <ng-template #t let-date let-focused="focused">
           <span class="custom-day" [class.focused]="focused">
             {{ date.day }}
           </span>
         </ng-template>
         <div class="input-group-prepend" (click)="e.toggle()">
-          <span class="input-group-text rounded-right border-left-0 bg-white c-point" style="    height: 45px;
+          <span class="input-group-text rounded-right border-left-0 bg-white c-point" style="height: 45px;
           border-radius: 0;"><i class="fa fa-calendar-check-o" aria-hidden="true"></i></span>
         </div>
       </div>
