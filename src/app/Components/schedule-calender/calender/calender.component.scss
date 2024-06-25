@@ -138,7 +138,7 @@ $app_color: #18bcbe;
 }
 
 .pastSolt{
-  background-color: #ececec;
+  background-color: none !important;
   height: 40px;
   display: flex;
   justify-content: space-between;
@@ -231,6 +231,11 @@ $app_color: #18bcbe;
 ::ng-deep .cal-week-view .cal-time-events {
   border-color: #ffffff;
   border-right-color: #ddd0d0;
+}
+
+::ng-deep .cal-week-view .cal-current-time-marker {
+  background-color: transparent;
+  border-top: 1px dashed #ea4334;
 }
 
 ::ng-deep .cal-week-view .cal-time {

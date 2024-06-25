@@ -1,5 +1,6 @@
 <section>
   <div class="col-10 mx-auto mt-5">
+  <div class="btn btn-danger d-none" id="clickHourFunction" (click)="refreshCalendarTimeLine()">refreshCalender</div>
     <div class="d-flex justify-content-end text-right">
       <div class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="addAvailability()"> Add Availability</div>
       <div class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2"> Copy Availability</div>
@@ -18,7 +19,6 @@
       <div class="date-picker-wrapper">
         <div class="input-group mb-0 pointer">
           <div class="date-navigation">
-
             <div class="mr-4 mb-0 h4 p-sub-title-small-odd date-display" (click)="e.toggle()">
               {{formatter.format(dairyDate) | date:'EEEE, d MMMM y'}}
             </div>
@@ -51,7 +51,6 @@
           </div>
         </div>
       </div>
-
       <div
         class="my-auto pointer ms-5"
         mwlCalendarNextView
@@ -79,78 +78,98 @@
       [weekStartsOn]="1"
       (hourSegmentClicked)="appointmentBoxClick($event)"
       [headerTemplate]="headerTemplate"
+      [currentTimeMarkerTemplate]="currentTimeTemplate"
       [hourSegmentHeight]="40"
       [eventTemplate]="templatePlan"
       [hourSegmentTemplate]="customHourSegmentTemplate"
       >
     </mwl-calendar-week-view>
-    <!-- (eventClicked)="handleEvent('Clicked', $event.event)" -->
-    <!-- (eventTimesChanged)="eventTimesChanged($event)" -->
   </div>
+
+  <ng-template #currentTimeTemplate let-dayStartHour="dayStartHour" let-hourSegments="hourSegments">
+    <div class="cal-current-time-marker" [style.top]="hourTime">
+    </div>
+  </ng-template>
 
   <!-- EVENT TEMPLATE -->
   <ng-template #templatePlan let-weekEvent="weekEvent">
-    <div class="available-box" [ngClass]="weekEvent.event.meta ? (weekEvent.event.isPast ? 'pastSolt' : 'bookedSlot') : 'available-box'">
-        <div class="available-text" (click)="openBookingEvent(weekEvent.event)">{{ weekEvent.event.meta ? weekEvent.event.meta.name : 'Available' }}</div>
-        <div class="close-btn pointer" (click)="deleteEvent(weekEvent)" [ngClass]="{'d-none':weekEvent.event.isPast}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill"  viewBox="0 0 16 16">
-              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
-            </svg>
+    <div class="" [ngClass]="weekEvent.event.meta ? (weekEvent.event.isPast ? 'pastSolt' : weekEvent.event.meta.status === 0 ? 'pastSolt' : 'bookedSlot') : (weekEvent.event.isPast ? 'pastSolt' : 'available-box')">
+      <div class="available-text" (click)="openBookingEvent(weekEvent.event)">
+        <div *ngIf="weekEvent.event.meta">
+          <div *ngIf="weekEvent.event.meta.status === 0">
+            Cancelled
+          </div>
         </div>
-    </div>
-</ng-template>
+        <div *ngIf="!weekEvent.event.meta && !weekEvent.event.isPast">
+          <div>{{'Available'}}</div>
+        </div>
+        <div *ngIf="weekEvent.event.meta">
+          <div [ngClass]="{'text-decoration-line-through':weekEvent.event.meta.status === 0}">{{weekEvent.event ? weekEvent.event.meta.name : 'Available'}}</div>
+        </div>
+      </div>
 
-<!-- HEADER TEMPLATE -->
-<ng-template #headerTemplate let-days="days" let-locale="locale" let-dayClicked="dayClicked" let-eventDropped="eventDropped">
-  <div class="cal-day-headers cursor-default">
-    <!-- (mwlClick)="dayClicked.emit({date: day.date})" -->
-    <div
-      class="cal-header text-left"
-      *ngFor="let day of days"
-      [class.cal-past]="day.isPast"
-      [class.cal-future]="day.isFuture"
-      [class.cal-drag-over]="day.dragOver"
-      mwlDroppable
-      (dragEnter)="day.dragOver = true"
-      (dragLeave)="day.dragOver = false"
-      (drop)="day.dragOver = false; eventDropped.emit({event: $event.dropData.event, newStart: day.date, fromHeader: true})">
-      <div class="top" [class.today]="day.isToday" [class.bold-today]="day.isToday">
-        <div class="day-label text-uppercase">{{ day.date | date:'EEEE' }}</div>
-        <div class="d-flex d-flex justify-content-between">
-          <div class="day-number">{{ day.date | date:'d' }}</div>
-          <div class="pointer" *ngIf="hasEvent(day.date)" (mwlClick)="copyDate(day.date)">
-            <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="22" height="22" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class="p-light-color">
-              <g>
-                  <clipPath id="a">
-                      <path d="M0 0h24v24H0z" fill="currentColor" opacity="1" data-original="currentColor" class=""></path>
-                  </clipPath>
-                  <g clip-path="url(#a)">
-                      <path fill="currentColor" d="M15 1H4c-1.1 0-2 .9-2 2v13c0 .55.45 1 1 1s1-.45 1-1V4c0-.55.45-1 1-1h10c.55 0 1-.45 1-1s-.45-1-1-1zm4 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-1 16H9c-.55 0-1-.45-1-1V8c0-.55.45-1 1-1h9c.55 0 1 .45 1 1v12c0 .55-.45 1-1 1z" opacity="1" data-original="currentColor" class=""></path>
-                  </g>
-              </g>
-            </svg>
+      <!-- CLOSE ICON -->
+      <div *ngIf="!weekEvent.event.isPast">
+      <div *ngIf="weekEvent.event.meta">
+        <div class="close-btn pointer" (click)="deleteEventOrCancel(weekEvent)" *ngIf="weekEvent.event.meta.status !== 0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill"  viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="close-btn pointer" (click)="deleteEventOrCancel(weekEvent)" *ngIf="!weekEvent.event.meta">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill"  viewBox="0 0 16 16">
+          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+        </svg>
+      </div>
+      </div>
+
+    </div>
+  </ng-template>
+
+  <!-- HEADER TEMPLATE -->
+  <ng-template #headerTemplate let-days="days" let-locale="locale" let-dayClicked="dayClicked" let-eventDropped="eventDropped">
+    <div class="cal-day-headers cursor-default">
+      <!-- (mwlClick)="dayClicked.emit({date: day.date})" -->
+      <div
+        class="cal-header text-left"
+        *ngFor="let day of days"
+        [class.cal-past]="day.isPast"
+        [class.cal-future]="day.isFuture"
+        [class.cal-drag-over]="day.dragOver"
+        mwlDroppable
+        (dragEnter)="day.dragOver = true"
+        (dragLeave)="day.dragOver = false"
+        (drop)="day.dragOver = false; eventDropped.emit({event: $event.dropData.event, newStart: day.date, fromHeader: true})">
+        <div class="top" [class.today]="day.isToday" [class.bold-today]="day.isToday">
+          <div class="day-label text-uppercase">{{ day.date | date:'EEEE' }}</div>
+          <div class="d-flex d-flex justify-content-between">
+            <div class="day-number">{{ day.date | date:'d' }}</div>
+            <div class="pointer" *ngIf="hasEvent(day.date) && !day.isPast" (mwlClick)="copyDate(day.date)">
+              <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="22" height="22" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class="p-light-color">
+                <g>
+                    <clipPath id="a">
+                        <path d="M0 0h24v24H0z" fill="currentColor" opacity="1" data-original="currentColor" class=""></path>
+                    </clipPath>
+                    <g clip-path="url(#a)">
+                        <path fill="currentColor" d="M15 1H4c-1.1 0-2 .9-2 2v13c0 .55.45 1 1 1s1-.45 1-1V4c0-.55.45-1 1-1h10c.55 0 1-.45 1-1s-.45-1-1-1zm4 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-1 16H9c-.55 0-1-.45-1-1V8c0-.55.45-1 1-1h9c.55 0 1 .45 1 1v12c0 .55-.45 1-1 1z" opacity="1" data-original="currentColor" class=""></path>
+                    </g>
+                </g>
+              </svg>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</ng-template>
+  </ng-template>
 
   <!-- HOUR SEGMENT -->
-  <ng-template #customHourSegmentTemplate
-             let-segment="segment"
-             let-locale="locale"
-             let-segmentHeight="segmentHeight"
-             let-isTimeLabel="isTimeLabel">
-  <div class="cal-hour-segment"
-       [style.height.px]="segmentHeight"
-       [class.cal-hour-start]="segment.isStart"
-       [class.cal-after-hour-start]="!segment.isStart"
-       [ngClass]="segment.cssClass">
-    <div class="cal-time" *ngIf="isTimeLabel">
-      {{ segment.displayDate | date: 'hh:mm a' : locale }}
+  <ng-template #customHourSegmentTemplate let-segment="segment" let-locale="locale" let-segmentHeight="segmentHeight" let-isTimeLabel="isTimeLabel">
+    <div class="cal-hour-segment" [style.height.px]="segmentHeight" [class.cal-hour-start]="segment.isStart" [class.cal-after-hour-start]="!segment.isStart" [ngClass]="segment.cssClass">
+      <div class="cal-time" *ngIf="isTimeLabel">
+        {{ segment.displayDate | date: 'hh:mm a' : locale }}
+      </div>
     </div>
-  </div>
   </ng-template>
   </div>
 </section>
@@ -214,3 +233,4 @@
     </div>
   </div>
 </div>
+

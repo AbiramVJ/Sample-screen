@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef, inject, OnInit, } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef, inject, OnInit,ChangeDetectorRef, NgZone  } from '@angular/core';
 import { Subject } from 'rxjs';
 import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEvent,CalendarView, } from 'angular-calendar';
@@ -15,9 +15,6 @@ import { AppointmentService } from 'src/app/Services/appointment.service';
 })
 
 export class CalenderComponent implements OnInit {
-
-@ViewChild('modalContent', { static: true }) modalContent!: TemplateRef<any>;
-
 public formatter = inject(NgbDateParserFormatter);
 public currentDateTime: any = {year: new Date().getFullYear(), month: new Date().getMonth() + 1, day: new Date().getDate()};
 
@@ -25,7 +22,6 @@ public currentDateTime: any = {year: new Date().getFullYear(), month: new Date()
 public view: CalendarView = CalendarView.Week;
 public CalendarView = CalendarView;
 public dairyDate!: NgbDateStruct;
-
 public viewDate: Date = new Date();
 public today = new Date();
 
@@ -35,6 +31,9 @@ public startDate:any;
 public copyStartDate:any = new Date();
 public copyToDate:any = new Date();
 public appointments:any;
+
+public hourTime:string = '';
+private id:number = 1;
 
 public refresh = new Subject<void>();
 public calenderEvents: CalendarEvent[] = [];
@@ -143,6 +142,7 @@ public endTimeList:any[] = [
   {id: 47,time: '11:30 PM',value: '23:30'},
 ];
 
+
 public timsoltFrom!:FormGroup;
   constructor(
     private datePipe: DatePipe,
@@ -158,7 +158,15 @@ public timsoltFrom!:FormGroup;
     //GET APPOINTMENT OF CURRENT WEEK
     this.appointments = this.appointment.getAppointmentsOfWeek();
     this.appointments.forEach((element:any) => { this.calenderEvents.push(element);});
+    this.refreshCalendarTimeLine();
+    setInterval(() => {
+      let modalOpenBtn: HTMLElement = document.getElementById('clickHourFunction') as HTMLElement;
+      if(modalOpenBtn){
+        modalOpenBtn.click();
+      }
+    }, 60000);
   }
+
 
   //ADD TIMESOLT TIME CHANGE
   public _changeTime(){
@@ -182,14 +190,24 @@ public timsoltFrom!:FormGroup;
     }
   }
 
+  //CALENDER TIME RED LINE POSITION CHANGE
+  public refreshCalendarTimeLine() {
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    let totalMinutes = hours * 60 + minutes;
+    let totalPixels = (totalMinutes / 15) * 20;
+    this.hourTime = `${totalPixels}px`;
+  }
+
 
   //ADD APPOINTMENT
   public addAppointment(){
     let appointmentDate = this.startDate + ' ' + this.startTime;
-    console.log(appointmentDate);
     var date = new Date(appointmentDate);
+    this.id = this.id + 1;
     const newEvent: CalendarEvent = {
-      id:1,
+      id:this.id,
       start: date,
       end: date,
       title: 'New event',
@@ -204,7 +222,7 @@ public timsoltFrom!:FormGroup;
   }
 
   //COPY DATE
-  copyDate(copyDate:any){
+  public copyDate(copyDate:any){
     let modalOpenBtn: HTMLElement = document.getElementById('copyolot-popup-btn') as HTMLElement;
     if(modalOpenBtn){
       modalOpenBtn.click();
@@ -215,75 +233,61 @@ public timsoltFrom!:FormGroup;
     this.copyToDate = this.datePipe.transform(newDate, 'yyyy-MM-dd');
   }
 
-  copyAppointment(){
+  //COPY APPOINTMENT API CALL
+  public copyAppointment(){
    const copyAppointMent = this.appointment.copyAppointMent();
    copyAppointMent.forEach((appointMent:any) => {
     this.calenderEvents.push(appointMent);
    })
   }
 
-  openBookingEvent(event:any){
+  //OPEN BOOKED EVENT
+  public openBookingEvent(event:any){
     console.log(event);
   }
 
+  //ADD AVAILABILITY
   public addAvailability(){
     const formattedDate = this.datePipe.transform(this.today, 'yyyy-MM-dd');
     this.startDate = formattedDate;
   }
 
 
-  deleteEvent(eventToDelete: any) {
-    this.calenderEvents = this.calenderEvents.filter((event) => event.id !== eventToDelete.event.id);
+  //DELETE OT CANCEL APPOINTMENT
+  public deleteEventOrCancel(eventToDelete: any) {
+    if(eventToDelete.event.meta){
+      if(eventToDelete.event.meta.status === 1){
+        this.calenderEvents.forEach((event)=> {
+          if(event.id === eventToDelete.event.id){
+            event.meta.status = 0;
+          }
+        })
+      }
+    }else{
+      this.calenderEvents = this.calenderEvents.filter((event) => event.id !== eventToDelete.event.id);
+    }
   }
 
-  setView(view: CalendarView) {
-    this.view = view;
-  }
-
-  closeOpenMonthViewDay() {
+  //DAIRY DATE
+  public closeOpenMonthViewDay() {
     const selectedDate = {year: this.viewDate.getFullYear(), month: this.viewDate.getMonth() + 1, day: this.viewDate.getDate()};
     this.dairyDate = selectedDate;
   }
 
-  dateChange(){
+  //DAIRY DATE CHANGE
+  public dateChange(){
    let originalFormat = this.getOriginalFormat(this.dairyDate);
    this.viewDate = new Date(originalFormat);
    this.currentDateTime = this.dairyDate;
- //  this.currentDateTime = new Date(this.formatter.format(this.model)).toISOString().slice(0, 10);
   }
 
-  getOriginalFormat(date:any){
-    return date.year + '-' + date.month + '-' + date.day;
-  }
-
-  hasEvent(date: Date): boolean {
+  //CHECK EVENT IS THERE IN THE DATE
+  public hasEvent(date: Date): boolean {
     return this.calenderEvents.some(event => new Date(event.start).toDateString() === date.toDateString());
   }
 
-
- // unwanted functions
- getDateAsObj(date:string){
-  var data = date.split('-');
-  return {"year": Number(data[0]), "month": Number(data[1]), "day": Number(data[2])};
-}
-
-  parseTime(timeString: string): { hours: number, minutes: number } {
-    const time = timeString.match(/(\d+):(\d+)(\w{2})/);
-    if (time) {
-      let hours = parseInt(time[1], 10);
-      const minutes = parseInt(time[2], 10);
-      const period = time[3].toUpperCase();
-
-      if (period === 'PM' && hours < 12) {
-        hours += 12;
-      } else if (period === 'AM' && hours === 12) {
-        hours = 0;
-      }
-
-      return { hours, minutes };
-    }
-    return { hours: 0, minutes: 0 };
+  private getOriginalFormat(date:any){
+    return date.year + '-' + date.month + '-' + date.day;
   }
-
 
 }

@@ -12,6 +12,7 @@ export class Appointment {
     this.end = new Date(timeFormat(obj.endDateTime));
     this.meta = obj.appointment ? new MetaData(obj.appointment) : undefined;
     this.isPast = getStatusOfAppointment(obj.startDateTime);
+
   }
 }
 
