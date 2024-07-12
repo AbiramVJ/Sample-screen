@@ -20,6 +20,7 @@ import { TimesoltFromComponent } from './Components/schedule-calender/add-time-s
 import { EditorComponent } from './Components/schedule-calender/HtmlEditor/editor/editor.component'; // Import ReactiveFormsModule
 
 import {NgxSimpleTextEditorModule} from 'ngx-simple-text-editor';
+import { BarChartComponent } from './Components/AppexChart/bar-chart/bar-chart.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import {NgxSimpleTextEditorModule} from 'ngx-simple-text-editor';
     TimePickerComponent,
     CalenderComponent,
     TimesoltFromComponent,
-    EditorComponent
+    EditorComponent,
+    BarChartComponent
   ],
   imports: [
     BrowserModule,

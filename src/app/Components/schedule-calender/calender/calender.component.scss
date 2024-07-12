@@ -246,6 +246,12 @@ $app_color: #18bcbe;
   font-size: 12px;
 }
 
+::ng-deep .cal-hour-segment .cal-hour-start{
+  height: 40px;
+  background-color: white;
+  border-bottom: 0px !important;
+}
+
 ::ng-deep .cal-week-view .cal-hour {
   background-color: #fafafa;
 }
@@ -290,5 +296,20 @@ $app_color: #18bcbe;
       font-weight: 500;
   }
 }
+
+@media only screen and (max-width: 900px) {
+  .medium-text-10{
+    font-size:10px !important
+  }
+}
+
+@media only screen and (max-width: 670px) {
+  .medium-text-8{
+    font-size:8px !important
+  }
+}
+
+
+
 
 

@@ -23,6 +23,7 @@
     "@ng-select/ng-select": "^10.0.4",
     "angular-calendar": "^0.30.0",
     "angularx-flatpickr": "^7.3.0",
+    "apexcharts": "^3.49.2",
     "bootstrap": "^5.2.3",
     "date-fns": "^2.29.3",
     "flatpickr": "^4.6.13",

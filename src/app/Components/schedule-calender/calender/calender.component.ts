@@ -1,6 +1,6 @@
-import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef, inject, OnInit,ChangeDetectorRef, NgZone  } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit} from '@angular/core';
 import { Subject } from 'rxjs';
-import { NgbDateParserFormatter, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateParserFormatter, NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEvent,CalendarView, } from 'angular-calendar';
 import { FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
