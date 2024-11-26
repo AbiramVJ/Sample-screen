@@ -1,0 +1,19 @@
+::ng-deep .arrow_box {
+  position: relative;
+  background: white;
+  border: 2px solid #7E98FD;
+  padding: 2px 20px 5px 20px !important;
+  border-radius: 5px;
+
+  .points{
+    font-weight: bold;
+  }
+
+  .date-data{
+    color: rgb(168, 164, 164);
+  }
+}
+
+::ng-deep .apexcharts-toolbar{
+  display: none !important;
+}
